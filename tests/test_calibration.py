@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 
 from src.reasonguard.calibration import calibrate, _mean, _std
 from src.reasonguard.main import app
-from src.reasonguard.scoring.pipeline import get_calibration, _calibration_store
+from src.reasonguard.scoring.pipeline import get_calibration
 
 client = TestClient(app)
 
