@@ -6,6 +6,20 @@
 
 ReasonGuard is a production-ready FastAPI middleware that scores the reliability of any reasoning LLM's output in a single pass, with zero access to model internals. It intercepts reasoning traces, computes a Hedge-to-Verify Ratio (HVR) and SELFDOUBT confidence score based on linguistic markers, and returns an ACCEPT/DEFER decision through a two-tier deployment cascade — giving you a free, high-precision confidence gate on top of any OpenAI-compatible API.
 
+## Tech Stack
+
+| Technology | Role |
+|---|---|
+| **Python 3.12+** | Core runtime |
+| **FastAPI** | Async API framework |
+| **httpx** | Async HTTP client for LLM proxy |
+| **pydantic** | Request/response validation |
+| **Redis** | Optional caching layer |
+| **Prometheus** | Metrics collection |
+| **Grafana** | Monitoring dashboards |
+| **spaCy-inspired regex** | Hedge/verify marker matching |
+| **Docker & Docker Compose** | Containerized deployment |
+
 ## Quick Start
 
 ```bash
