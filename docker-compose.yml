@@ -1,0 +1,41 @@
+services:
+  reasonguard:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - UPSTREAM_BASE_URL=${UPSTREAM_BASE_URL:-https://api.openai.com/v1}
+      - UPSTREAM_API_KEY=${UPSTREAM_API_KEY:-}
+      - REDIS_URL=redis://redis:6379/0
+      - DEFAULT_TAU=${DEFAULT_TAU:-0.0}
+      - HVR_GATE_ENABLED=${HVR_GATE_ENABLED:-true}
+      - ENABLE_MI_PROXY=${ENABLE_MI_PROXY:-false}
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - reasonguard
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/reasonguard.json
+    volumes:
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
